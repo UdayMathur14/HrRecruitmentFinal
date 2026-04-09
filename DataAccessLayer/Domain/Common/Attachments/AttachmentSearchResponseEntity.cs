@@ -1,0 +1,12 @@
+using Models;
+using Models.ResponseModels.BaseResponseSetup;
+
+namespace DataAccessLayer.Domain.Common.Attachments
+{
+    public class AttachmentSearchResponseEntity : CommonResponseModel
+    {
+        public IEnumerable<AttachmentEntity>? Attachments { get; set; } = new List<AttachmentEntity>();
+        public PagingModel Paging { get; set; } = new PagingModel();
+        public Dictionary<string, List<string>> Filters { get; set; } = new Dictionary<string, List<string>>();
+    }
+}
