@@ -108,7 +108,7 @@ namespace BusinessLayer.Services.Common
                     Id = Guid.NewGuid(),
                     ReferenceType = (int)requestModel.ReferenceType,
                     ReferenceId = requestModel.ReferenceId,
-                    FilePath = "/uploads/" + uniqueFileName,
+                    FilePath = "uploads/" + uniqueFileName,
                     FileName = requestModel.File.FileName,
                     CreatedBy = requestModel.CreatedBy,
                     CreatedOn = DateTime.Now,
@@ -145,12 +145,12 @@ namespace BusinessLayer.Services.Common
 
             if (requestModel.ReferenceType.HasValue && !IsValidReferenceType(requestModel.ReferenceType.Value))
             {
-                    return new AttachmentSearchResponseModel
-                    {
-                        responseCode = StatusCodes.Status400BadRequest,
-                        message = "Invalid ReferenceType. Allowed values: Department, Job, or Candidate."
-                    };
-                }
+                return new AttachmentSearchResponseModel
+                {
+                    responseCode = StatusCodes.Status400BadRequest,
+                    message = "Invalid ReferenceType. Allowed values: Department or Job."
+                };
+            }
 
             if (requestModel.ReferenceType.HasValue && requestModel.ReferenceId.HasValue)
             {

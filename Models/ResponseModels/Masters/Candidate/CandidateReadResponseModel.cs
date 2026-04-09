@@ -13,7 +13,6 @@ namespace Models.ResponseModels.Masters.Candidate
         public string? University { get; set; }
         public string? CurrentTitle { get; set; }
         public string? CurrentCompany { get; set; }
-        public string? Summary { get; set; }
         public decimal? ExperienceYears { get; set; }
         public string? Location { get; set; }
         public string? Skills { get; set; }

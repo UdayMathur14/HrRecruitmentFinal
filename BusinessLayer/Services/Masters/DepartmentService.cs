@@ -95,31 +95,25 @@ namespace BusinessLayer.Services.Masters
                 if (!string.IsNullOrWhiteSpace(requestModel.Status))
                     entity.Status = requestModel.Status;
 
-                if (requestModel.OwnerId.HasValue)
-                    entity.OwnerId = requestModel.OwnerId;
-
+                entity.OwnerId = requestModel.OwnerId;
                 entity.ModifiedOn = DateTime.Now;
                 entity.ModifiedBy = requestModel.ActionBy;
 
+                // Clear navigational properties to avoid tracking conflicts
                 entity.OwnerUser = null;
                 entity.DepartmentMembers = null;
 
-                if (requestModel.DepartmentMembers.Count > 0)
-                {
-                    var members = requestModel.DepartmentMembers
-                        .Select(member => new DepartmentMembersEntity
-                        {
-                            DeptId = entity.Id,
-                            UserId = member.UserId,
-                            CreatedOn = DateTime.Now,
-                            CreatedBy = requestModel.ActionBy,
-                            Status = "Active"
-                        })
-                        .ToList();
+                var members = requestModel.DepartmentMembers
+                    .Select(member => new DepartmentMembersEntity
+                    {
+                        DeptId = entity.Id,
+                        UserId = member.UserId,
+                        CreatedOn = DateTime.Now
+                    })
+                    .ToList();
 
-                    await departmentRepository.ReplaceMembersAsync(entity.Id, members);
-                }
-
+                // Update members first, then the department
+                await departmentRepository.ReplaceMembersAsync(entity.Id, members);
                 await departmentRepository.UpdateAsync(entity);
 
                 responseModel.responseCode = StatusCodes.Status200OK;

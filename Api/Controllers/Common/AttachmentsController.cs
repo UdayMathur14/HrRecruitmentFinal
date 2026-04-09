@@ -16,7 +16,6 @@ namespace Api.Controllers.Common
             if (data == null)
                 return BadRequest(new { code = 400, message = "Data Not Found!" });
 
-            data.FilePath = ToAbsoluteFileUrl(data.FilePath);
             return Ok(data);
         }
 
@@ -37,15 +36,6 @@ namespace Api.Controllers.Common
             var result = await attachmentService.SearchAttachmentAsync(requestModel, offset, count ?? "10");
             if (result?.responseCode == 400)
                 return BadRequest(result);
-
-            if (result?.Attachments != null)
-            {
-                foreach (var attachment in result.Attachments)
-                {
-                    attachment.FilePath = ToAbsoluteFileUrl(attachment.FilePath);
-                }
-            }
-
             return Ok(result);
         }
 
@@ -56,21 +46,6 @@ namespace Api.Controllers.Common
             if (data.responseCode == 400)
                 return BadRequest(data);
             return Ok(data);
-        }
-
-        private string? ToAbsoluteFileUrl(string? filePath)
-        {
-            if (string.IsNullOrWhiteSpace(filePath))
-                return filePath;
-
-            if (Uri.TryCreate(filePath, UriKind.Absolute, out _))
-                return filePath;
-
-            var normalizedPath = filePath.Replace("\\", "/");
-            if (!normalizedPath.StartsWith("/"))
-                normalizedPath = "/" + normalizedPath;
-
-            return $"{Request.Scheme}://{Request.Host}{normalizedPath}";
         }
     }
 }
