@@ -194,6 +194,8 @@ namespace DataAccessLayer.Repositories.Masters
             {
                 await _context.JobMembersEntity.AddRangeAsync(members);
             }
+
+            await _context.SaveChangesAsync();
         }
     }
 }

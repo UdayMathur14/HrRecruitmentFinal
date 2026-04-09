@@ -213,6 +213,8 @@ namespace DataAccessLayer.Repositories.Masters
             {
                 await _context.DepartmentMembersEntity.AddRangeAsync(members);
             }
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<DepartmentEntity> UpdateAsync(DepartmentEntity entity)

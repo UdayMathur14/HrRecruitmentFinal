@@ -99,6 +99,10 @@ namespace BusinessLayer.Services.Masters
                 entity.ModifiedOn = DateTime.Now;
                 entity.ModifiedBy = requestModel.ActionBy;
 
+                // Clear navigational properties to avoid tracking conflicts
+                entity.OwnerUser = null;
+                entity.DepartmentMembers = null;
+
                 var members = requestModel.DepartmentMembers
                     .Select(member => new DepartmentMembersEntity
                     {
@@ -108,8 +112,8 @@ namespace BusinessLayer.Services.Masters
                     })
                     .ToList();
 
+                // Update members first, then the department
                 await departmentRepository.ReplaceMembersAsync(entity.Id, members);
-
                 await departmentRepository.UpdateAsync(entity);
 
                 responseModel.responseCode = StatusCodes.Status200OK;

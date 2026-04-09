@@ -104,6 +104,10 @@ namespace BusinessLayer.Services.Masters
                 entity.ModifiedOn = DateTime.Now;
                 entity.ModifiedBy = requestModel.ActionBy;
 
+                // Clear navigational properties to avoid tracking conflicts
+                entity.JobOwnerUser = null;
+                entity.JobMembers = null;
+
                 var members = requestModel.JobMembers
                     .Select(member => new JobMembersEntity
                     {
@@ -115,6 +119,7 @@ namespace BusinessLayer.Services.Masters
                     })
                     .ToList();
 
+                // Update members first, then the job
                 await jobRepository.ReplaceMembersAsync(entity.Id, members);
 
                 await jobRepository.UpdateAsync(entity);
