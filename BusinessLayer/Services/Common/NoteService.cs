@@ -35,7 +35,7 @@ namespace BusinessLayer.Services.Common
                 if (!IsValidReferenceType(requestModel.ReferenceType))
                 {
                     response.responseCode = StatusCodes.Status400BadRequest;
-                    response.message = "Invalid ReferenceType. Allowed values: Department or Job.";
+                    response.message = "Invalid ReferenceType. Allowed values: Department, Job, or Candidate.";
                     return response;
                 }
 
@@ -72,12 +72,12 @@ namespace BusinessLayer.Services.Common
         {
             if (requestModel.ReferenceType.HasValue && !IsValidReferenceType(requestModel.ReferenceType.Value))
             {
-                return new NoteSearchResponseModel
-                {
-                    responseCode = StatusCodes.Status400BadRequest,
-                    message = "Invalid ReferenceType. Allowed values: Department or Job."
-                };
-            }
+                    return new NoteSearchResponseModel
+                    {
+                        responseCode = StatusCodes.Status400BadRequest,
+                        message = "Invalid ReferenceType. Allowed values: Department, Job, or Candidate."
+                    };
+                }
 
             if (requestModel.ReferenceType.HasValue && requestModel.ReferenceId.HasValue)
             {

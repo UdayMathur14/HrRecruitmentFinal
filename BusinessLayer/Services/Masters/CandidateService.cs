@@ -136,6 +136,9 @@ namespace BusinessLayer.Services.Masters
                 if (!string.IsNullOrWhiteSpace(requestModel.CurrentCompany))
                     entity.CurrentCompany = requestModel.CurrentCompany;
 
+                if (!string.IsNullOrWhiteSpace(requestModel.Summary))
+                    entity.Summary = requestModel.Summary;
+
                 if (requestModel.ExperienceYears.HasValue)
                     entity.ExperienceYears = requestModel.ExperienceYears.Value;
 
@@ -238,7 +241,7 @@ namespace BusinessLayer.Services.Masters
                 await resume.CopyToAsync(stream);
             }
 
-            return $"uploads/candidates/{uniqueFileName}";
+            return $"/uploads/candidates/{uniqueFileName}";
         }
     }
 }

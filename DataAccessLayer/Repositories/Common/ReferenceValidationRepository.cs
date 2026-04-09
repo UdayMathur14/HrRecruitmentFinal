@@ -16,6 +16,9 @@ namespace DataAccessLayer.Repositories.Common
                 ReferenceType.Job => await context.JobEntity
                     .AnyAsync(x => x.Id == referenceId),
 
+                ReferenceType.Candidate => await context.CandidateEntity
+                    .AnyAsync(x => x.Id == referenceId),
+
                 _ => false
             };
         }

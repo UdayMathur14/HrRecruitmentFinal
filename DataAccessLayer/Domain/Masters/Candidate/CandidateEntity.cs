@@ -36,6 +36,9 @@ namespace DataAccessLayer.Domain.Masters.Candidate
         [Column("CurrentCompany")]
         public string? CurrentCompany { get; set; }
 
+        [Column("Summary")]
+        public string? Summary { get; set; }
+
         [Column("ExperienceYears")]
         public decimal? ExperienceYears { get; set; }
 
