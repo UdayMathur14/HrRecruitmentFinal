@@ -21,6 +21,7 @@ namespace Models.ResponseModels.Masters.Candidate
         public string? LinkedInProfile { get; set; }
         public string? CVPath { get; set; }
         public int? AIScore { get; set; }
+        public string? Summary { get; set; }
         public string? Status { get; set; }
         public string? CandidateStatus { get; set; }
         public DateTime CreatedOn { get; set; }

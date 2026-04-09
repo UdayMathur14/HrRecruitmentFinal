@@ -62,6 +62,9 @@ namespace DataAccessLayer.Domain.Masters.Candidate
         [Column("AIScore")]
         public int? AIScore { get; set; }
 
+        [Column("Summary")]
+        public string? Summary { get; set; }
+
         [Column("CreatedOn")]
         public DateTime CreatedOn { get; set; }
 

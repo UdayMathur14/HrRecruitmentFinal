@@ -22,6 +22,7 @@ namespace Models.RequestModels.Masters.Candidate
         public string? LinkedInProfile { get; set; }
         public IFormFile? Resume { get; set; }
         public int? AIScore { get; set; }
+        public string? Summary { get; set; }
         public string? Status { get; set; }
         public string? CandidateStatus { get; set; }
         public Guid? CreatedBy { get; set; }
