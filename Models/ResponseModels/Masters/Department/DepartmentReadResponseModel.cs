@@ -1,3 +1,5 @@
+using Models.ResponseModels.Masters.Job;
+
 namespace Models.ResponseModels.Masters.Department
 {
     public class DepartmentReadResponseModel
@@ -10,5 +12,6 @@ namespace Models.ResponseModels.Masters.Department
         public DeptMemberReadResponseModel? Owner { get; set; }
         public int? JobCount { get; set; }
         public List<DeptMemberReadResponseModel> DepartmentMembers { get; set; } = new();
+        public List<JobReadResponseModel> Jobs { get; set; } = new();
     }
 }

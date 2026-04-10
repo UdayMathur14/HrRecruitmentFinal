@@ -27,5 +27,6 @@ namespace DataAccessLayer.Domain.Masters.Job
 
         public JobEntity? Job { get; set; }
         public UserEntity? User { get; set; }
+        public ICollection<JobMembersEntity> JobMembers { get; set; }
     }
 }

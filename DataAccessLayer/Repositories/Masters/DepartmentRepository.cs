@@ -1,4 +1,6 @@
 using DataAccessLayer.Domain.Masters.Department;
+using DataAccessLayer.Domain.Masters.Job;
+using DataAccessLayer.Domain.Masters.User;
 using DataAccessLayer.Interfaces.Masters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -32,21 +34,55 @@ namespace DataAccessLayer.Repositories.Masters
                     CreatedBy = d.CreatedBy,
                     ModifiedOn = d.ModifiedOn,
                     ModifiedBy = d.ModifiedBy,
-                    OwnerUser = d.OwnerUser == null ? null : new DataAccessLayer.Domain.Masters.User.UserEntity
+
+                    OwnerUser = d.OwnerUser == null ? null : new UserEntity
                     {
                         Id = d.OwnerUser.Id,
                         FirstName = d.OwnerUser.FirstName,
                         LastName = d.OwnerUser.LastName
                     },
+
                     DepartmentMembers = d.DepartmentMembers.Select(m => new DepartmentMembersEntity
                     {
                         UserId = m.UserId,
-                        User = m.User == null ? null : new DataAccessLayer.Domain.Masters.User.UserEntity
+                        User = m.User == null ? null : new UserEntity
                         {
                             Id = m.User.Id,
                             FirstName = m.User.FirstName,
                             LastName = m.User.LastName
                         }
+                    }).ToList(),
+
+                    // ?? CORRECT JOBS MAPPING
+                    Jobs = d.Jobs.Select(j => new JobEntity
+                    {
+                        Id = j.Id,
+                        JobName = j.JobName,
+                        Description = j.Description,
+                        HeadCount = j.HeadCount,
+                        JobStage = j.JobStage,
+                        Status = j.Status,
+
+                        // ? CORRECT (j se lo, d se nahi)
+                        JobOwnerUser = j.JobOwnerUser == null ? null : new UserEntity
+                        {
+                            Id = j.JobOwnerUser.Id,
+                            FirstName = j.JobOwnerUser.FirstName,
+                            LastName = j.JobOwnerUser.LastName
+                        },
+
+                        // ? CORRECT (j.JobMembers)
+                        JobMembers = j.JobMembers.Select(m => new JobMembersEntity
+                        {
+                            UserId = m.UserId,
+                            User = m.User == null ? null : new UserEntity
+                            {
+                                Id = m.User.Id,
+                                FirstName = m.User.FirstName,
+                                LastName = m.User.LastName
+                            }
+                        }).ToList()
+
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();

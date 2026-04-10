@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using DataAccessLayer.Domain.Masters.Department;
+using DataAccessLayer.Domain.Masters.Job;
 using DataAccessLayer.Domain.Masters.User;
 using Models.RequestModels.Masters.Department;
 using Models.ResponseModels.Masters.Department;
+using Models.ResponseModels.Masters.Job;
 
 namespace BusinessLayer.Mappings.Masters
 {
@@ -26,6 +28,8 @@ namespace BusinessLayer.Mappings.Masters
                     opt => opt.MapFrom(src => src.User != null ? $"{src.User.FirstName} {src.User.LastName}".Trim() : null));
 
             CreateMap<DepartmentSearchResponseEntity , DeptSearchResponseModel>();
+
+            CreateMap<JobEntity , JobReadResponseModel>();
 
         }
     }

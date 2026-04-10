@@ -1,4 +1,5 @@
 ﻿using DataAccess.Domain;
+using DataAccessLayer.Domain.Masters.Job;
 using DataAccessLayer.Domain.Masters.User;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -36,5 +37,6 @@ namespace DataAccessLayer.Domain.Masters.Department
 
         public UserEntity? OwnerUser { get; set; }
         public virtual ICollection<DepartmentMembersEntity>? DepartmentMembers { get; set; } = new HashSet<DepartmentMembersEntity>();
+        public virtual ICollection<JobEntity>? Jobs { get; set; } = new HashSet<JobEntity>();
     }
 }

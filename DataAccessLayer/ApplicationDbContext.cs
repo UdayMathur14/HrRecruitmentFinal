@@ -29,7 +29,6 @@ public class ApplicationDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
         modelBuilder.Entity<DepartmentEntity>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -42,6 +41,10 @@ public class ApplicationDbContext : DbContext
                   .WithMany()
                   .HasForeignKey(d => d.OwnerId)
                   .OnDelete(DeleteBehavior.NoAction);
+
+            entity.HasMany(d => d.Jobs)
+                  .WithOne(j => j.Department)
+                  .HasForeignKey(j => j.DeptId);
         });
 
         modelBuilder.Entity<DepartmentMembersEntity>(entity =>
