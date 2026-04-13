@@ -234,30 +234,38 @@ namespace DataAccessLayer.Repositories.Masters
             return response;
         }
 
+        public async Task<DepartmentEntity> UpdateAsync(DepartmentEntity entity)
+        {
+            // 1. Check if an instance with the same ID is already being tracked
+            var local = _context.DepartmentEntity.Local.FirstOrDefault(entry => entry.Id == entity.Id);
+
+            if (local != null)
+            {
+                _context.Entry(local).State = EntityState.Detached;
+            }
+
+            _context.Entry(entity).State = EntityState.Modified;
+
+            await _context.SaveChangesAsync();
+            return entity;
+        }
+
         public async Task ReplaceMembersAsync(Guid deptId, List<DepartmentMembersEntity> members)
         {
             var existingMembers = await _context.DepartmentMembersEntity
                 .Where(x => x.DeptId == deptId)
                 .ToListAsync();
 
-            if (existingMembers.Count > 0)
+            if (existingMembers.Any())
             {
                 _context.DepartmentMembersEntity.RemoveRange(existingMembers);
             }
-
-            if (members.Count > 0)
+            if (members.Any())
             {
                 await _context.DepartmentMembersEntity.AddRangeAsync(members);
             }
 
             await _context.SaveChangesAsync();
-        }
-
-        public async Task<DepartmentEntity> UpdateAsync(DepartmentEntity entity)
-        {
-            _context.DepartmentEntity.Update(entity);
-            await _context.SaveChangesAsync();
-            return entity;
         }
     }
 }

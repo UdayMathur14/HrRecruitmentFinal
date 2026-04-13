@@ -71,61 +71,49 @@ namespace BusinessLayer.Services.Masters
         public async Task<CommonResponseModel> UpdateDepartmentAsync(Guid id, DepartmentUpdateRequestModel requestModel)
         {
             CommonResponseModel responseModel = new CommonResponseModel();
-
             try
             {
-                DepartmentEntity? entity = await departmentRepository.FindAsync(id);
-
+                var entity = await departmentRepository.FindAsync(id);
                 if (entity == null)
                 {
-                    responseModel.responseCode = StatusCodes.Status400BadRequest;
+                    responseModel.responseCode = 400;
                     responseModel.message = "Data Not Found!";
                     return responseModel;
                 }
 
-                if (!string.IsNullOrWhiteSpace(requestModel.DeptName))
-                    entity.DeptName = requestModel.DeptName;
-
-                if (!string.IsNullOrWhiteSpace(requestModel.Location))
-                    entity.Location = requestModel.Location;
-
-                if (!string.IsNullOrWhiteSpace(requestModel.Description))
-                    entity.Description = requestModel.Description;
-
-                if (!string.IsNullOrWhiteSpace(requestModel.Status))
-                    entity.Status = requestModel.Status;
-
+                entity.DeptName = requestModel.DeptName ?? entity.DeptName;
+                entity.Location = requestModel.Location ?? entity.Location;
+                entity.Description = requestModel.Description ?? entity.Description;
+                entity.Status = requestModel.Status ?? entity.Status;
                 entity.OwnerId = requestModel.OwnerId;
                 entity.ModifiedOn = DateTime.Now;
                 entity.ModifiedBy = requestModel.ActionBy;
 
-                // Clear navigational properties to avoid tracking conflicts
                 entity.OwnerUser = null;
                 entity.DepartmentMembers = null;
 
-                var members = requestModel.DepartmentMembers
-                    .Select(member => new DepartmentMembersEntity
-                    {
-                        DeptId = entity.Id,
-                        UserId = member.UserId,
-                        CreatedOn = DateTime.Now
-                    })
-                    .ToList();
+                var newMembers = requestModel.DepartmentMembers.Select(m => new DepartmentMembersEntity
+                {
+                    Id = Guid.NewGuid(),
+                    DeptId = id,
+                    UserId = m.UserId,
+                    CreatedOn = DateTime.Now,
+                    CreatedBy = requestModel.ActionBy
+                }).ToList();
 
-                // Update members first, then the department
-                await departmentRepository.ReplaceMembersAsync(entity.Id, members);
+                await departmentRepository.ReplaceMembersAsync(id, newMembers);
+
                 await departmentRepository.UpdateAsync(entity);
 
-                responseModel.responseCode = StatusCodes.Status200OK;
+                responseModel.responseCode = 200;
                 responseModel.message = "Updated Successfully!";
                 responseModel.Id = entity.Id;
             }
             catch (Exception ex)
             {
-                responseModel.responseCode = StatusCodes.Status400BadRequest;
-                responseModel.message = ex.Message;
+                responseModel.responseCode = 400;
+                responseModel.message = ex.InnerException?.Message ?? ex.Message;
             }
-
             return responseModel;
         }
     }
